@@ -46,6 +46,7 @@ import streamlit as st
 #os.environ["OPENAI_API_KEY"] = "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"
 
 EMBEDDING_MODEL_NAME = "hkunlp/instructor-large" 
+EMBEDDING_MODEL_NAME =  "intfloat/e5-base-v2"
 
 LLM_MODEL_OPENAI = 1
 LLM_MODEL_BEDROCK = 0
