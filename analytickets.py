@@ -78,7 +78,7 @@ if st.session_state['working'] == 0:
 
         embeddings = HuggingFaceInstructEmbeddings(
             model_name=EMBEDDING_MODEL_NAME,
-            model_kwargs={"device": "mps"},
+            #model_kwargs={"device": "mps"},
         )
     elif LLM_MODEL_BEDROCK:
         embeddings = BedrockEmbeddings(client=boto3_bedrock)
