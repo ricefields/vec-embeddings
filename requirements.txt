@@ -1,0 +1,17 @@
+openai
+langchain
+streamlit
+python-dotenv
+PyPDF2
+faiss-cpu
+unstructured
+tiktoken
+jq
+pyyaml
+docx2txt
+docx
+pypdf
+boto3
+botocore
+InstructorEmbedding
+sentence-transformers
