@@ -75,12 +75,12 @@ elif LLM_MODEL_BEDROCK:
 if st.session_state['working'] == 0:
     if LLM_MODEL_OPENAI:
 
-        #embeddings = HuggingFaceInstructEmbeddings(
-        #    model_name=EMBEDDING_MODEL_NAME,
-        #    #model_kwargs={"device": "mps"},
-        #)
+        embeddings = HuggingFaceInstructEmbeddings(
+            model_name=EMBEDDING_MODEL_NAME,
+            model_kwargs={'device': 'cpu'},
+        )
 
-        embeddings = OpenAIEmbeddings()
+        #embeddings = OpenAIEmbeddings()
         
     elif LLM_MODEL_BEDROCK:
         embeddings = BedrockEmbeddings(client=boto3_bedrock)
