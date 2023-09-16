@@ -115,7 +115,7 @@ Prompt_template = PromptTemplate(
 
     The following is the context: {context} 
 
-    Question: {query}.Can you determine and resolve the cause of this problem based on the provided knowledgebase?
+    Question: {query}. Can you determine and resolve the cause of this problem based on the provided knowledgebase?
 
     Helpful Answer:
     """
@@ -124,7 +124,7 @@ Prompt_template = PromptTemplate(
 Prompt_template_SPI = PromptTemplate(
     input_variables = ["text_with_spi"],
     template = """
-    Please scrub any Sensitive Personal Information including IP addresses and phone numbers from the 
+    Please anonymize any Sensitive Personal Information including IP addresses, dates and phone numbers from the 
     following text and print the results: {text_with_spi}
 
     """
