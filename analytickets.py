@@ -51,6 +51,7 @@ EMBEDDING_MODEL_NAME =  "intfloat/e5-base-v2"
 
 LLM_MODEL_OPENAI = 1
 LLM_MODEL_BEDROCK = 0
+LLM_EMBEDDINGS_LOCAL = 0 #Use HuggingsFaceEmbeddings
 
 knowledgebase_index = "./ticket-index"
 
@@ -75,17 +76,23 @@ elif LLM_MODEL_BEDROCK:
                     )
     
 if st.session_state['working'] == 0:
-    if LLM_MODEL_OPENAI:
-
+    if LLM_EMBEDDINGS_LOCAL == 1:
         embeddings = HuggingFaceInstructEmbeddings(
             model_name=EMBEDDING_MODEL_NAME,
             model_kwargs={'device': 'cpu'},
         )
-
-        #embeddings = OpenAIEmbeddings()
+    else:
+        if LLM_MODEL_OPENAI == 1:
+            embeddings = OpenAIEmbeddings()
         
-    elif LLM_MODEL_BEDROCK:
-        embeddings = BedrockEmbeddings(client=boto3_bedrock)
+        elif LLM_MODEL_BEDROCK == 1:
+            embeddings = BedrockEmbeddings(client=boto3_bedrock)
+        
+        else: # default to HuggingFace
+            embeddings = HuggingFaceInstructEmbeddings(
+            model_name=EMBEDDING_MODEL_NAME,
+            model_kwargs={'device': 'cpu'},
+        )
 
     st.session_state['knowledgebase'] = FAISS.load_local(knowledgebase_index, embeddings)
 
@@ -111,6 +118,15 @@ Prompt_template = PromptTemplate(
     Question: {query}.Can you determine and resolve the cause of this problem based on the provided knowledgebase?
 
     Helpful Answer:
+    """
+)
+
+Prompt_template_SPI = PromptTemplate(
+    input_variables = ["text_with_spi"],
+    template = """
+    Please scrub any Sensitive Personal Information including IP addresses and phone numbers from the 
+    following text and print the results: {text_with_spi}
+
     """
 )
 
@@ -204,9 +220,9 @@ if query:
 
 if 0:
     # Use OpenAI as consultant rather than analyzing past ticket data
-    chain = LLMChain(llm=model, prompt=Prompt_template_native)
+    chain = LLMChain(llm=model, prompt=Prompt_template_SPI)
 
     with get_openai_callback() as cb:
-        response = chain.run(query=query)
+        response = chain.run(text_with_spi=response)
         print (cb)
     print (response)
